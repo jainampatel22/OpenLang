@@ -60,10 +60,11 @@ const fetchGlobalRepos = async () => {
       'https://api.github.com/search/repositories',
       {
         params: {
-          q: 'stars:>1000',
+          q: ' stars:>1000',
+         
           sort: 'updated',
           order: 'desc',
-          per_page: 10 // Fetch more to filter
+          per_page: 20 // Fetch more to filter
         },
         ...githubApiConfig
       }
@@ -98,12 +99,275 @@ const fetchGlobalRepos = async () => {
       })
     );
 
-    return activeRepos.filter(Boolean).slice(0, 10); // Return up to 10 active repos
+    return activeRepos.filter(Boolean).slice(0, 20); // Return up to 10 active repos
   } catch (error) {
     console.error('Error fetching global repos:', error.message);
     throw error;
   }
 };
+
+const fetchTsRepo = async () => {
+    try {
+      const { data } = await axios.get(
+        'https://api.github.com/search/repositories',
+        {
+          params: {
+            q: 'language:typescript stars:>1000',
+           
+            sort: 'updated',
+            order: 'desc',
+            per_page: 10 // Fetch more to filter
+          },
+          ...githubApiConfig
+        }
+      );
+  
+      const activeRepos = await Promise.all(
+        data.items.map(async (repo) => {
+          const [{ recentIssues, recentPRs }] = await Promise.all([
+              fetchRecentActivity(repo.owner.login, repo.name),
+              fetchLanguages(repo.owner.login,repo.name)  
+          ]) 
+          // Check if there's been activity in the last 7 days
+          const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+          const hasRecentActivity = [...recentIssues, ...recentPRs].some(
+            item => new Date(item.updatedAt) > sevenDaysAgo
+          );
+  
+          if (hasRecentActivity) {
+            return {
+              name: repo.name,
+              owner: repo.owner.login,
+              url: repo.html_url,
+              stars: repo.stargazers_count,
+              forks: repo.forks_count,
+              updatedAt: repo.updated_at,
+              recentIssues,
+              recentPRs,
+              
+            };
+          }
+          return null;
+        })
+      );
+  
+      return activeRepos.filter(Boolean).slice(0, 10); // Return up to 10 active repos
+    } catch (error) {
+      console.error('Error fetching global repos:', error.message);
+      throw error;
+    }
+  };  
+
+
+
+  const fetchJsRepo = async () => {
+    try {
+      const { data } = await axios.get(
+        'https://api.github.com/search/repositories',
+        {
+          params: {
+            q: 'language:javascript stars:>1000',
+           
+            sort: 'updated',
+            order: 'desc',
+            per_page: 10 // Fetch more to filter
+          },
+          ...githubApiConfig
+        }
+      );
+  
+      const activeRepos = await Promise.all(
+        data.items.map(async (repo) => {
+          const [{ recentIssues, recentPRs }] = await Promise.all([
+              fetchRecentActivity(repo.owner.login, repo.name),
+              fetchLanguages(repo.owner.login,repo.name)  
+          ]) 
+          // Check if there's been activity in the last 7 days
+          const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+          const hasRecentActivity = [...recentIssues, ...recentPRs].some(
+            item => new Date(item.updatedAt) > sevenDaysAgo
+          );
+  
+          if (hasRecentActivity) {
+            return {
+              name: repo.name,
+              owner: repo.owner.login,
+              url: repo.html_url,
+              stars: repo.stargazers_count,
+              forks: repo.forks_count,
+              updatedAt: repo.updated_at,
+              recentIssues,
+              recentPRs,
+              
+            };
+          }
+          return null;
+        })
+      );
+  
+      return activeRepos.filter(Boolean).slice(0, 10); // Return up to 10 active repos
+    } catch (error) {
+      console.error('Error fetching global repos:', error.message);
+      throw error;
+    }
+  };
+
+  const fetchPythonRepo = async () => {
+    try {
+      const { data } = await axios.get(
+        'https://api.github.com/search/repositories',
+        {
+          params: {
+            q: 'language:python stars:>1000',
+           
+            sort: 'updated',
+            order: 'desc',
+            per_page: 10 // Fetch more to filter
+          },
+          ...githubApiConfig
+        }
+      );
+  
+      const activeRepos = await Promise.all(
+        data.items.map(async (repo) => {
+          const [{ recentIssues, recentPRs }] = await Promise.all([
+              fetchRecentActivity(repo.owner.login, repo.name),
+              fetchLanguages(repo.owner.login,repo.name)  
+          ]) 
+          // Check if there's been activity in the last 7 days
+          const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+          const hasRecentActivity = [...recentIssues, ...recentPRs].some(
+            item => new Date(item.updatedAt) > sevenDaysAgo
+          );
+  
+          if (hasRecentActivity) {
+            return {
+              name: repo.name,
+              owner: repo.owner.login,
+              url: repo.html_url,
+              stars: repo.stargazers_count,
+              forks: repo.forks_count,
+              updatedAt: repo.updated_at,
+              recentIssues,
+              recentPRs,
+              
+            };
+          }
+          return null;
+        })
+      );
+  
+      return activeRepos.filter(Boolean).slice(0, 10); // Return up to 10 active repos
+    } catch (error) {
+      console.error('Error fetching global repos:', error.message);
+      throw error;
+    }
+  };
+
+  const fetchCRepo = async () => {
+    try {
+      const { data } = await axios.get(
+        'https://api.github.com/search/repositories',
+        {
+          params: {
+            q: 'language:C stars:>1000',
+           
+            sort: 'updated',
+            order: 'desc',
+            per_page: 10 // Fetch more to filter
+          },
+          ...githubApiConfig
+        }
+      );
+  
+      const activeRepos = await Promise.all(
+        data.items.map(async (repo) => {
+          const [{ recentIssues, recentPRs }] = await Promise.all([
+              fetchRecentActivity(repo.owner.login, repo.name),
+              fetchLanguages(repo.owner.login,repo.name)  
+          ]) 
+          // Check if there's been activity in the last 7 days
+          const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+          const hasRecentActivity = [...recentIssues, ...recentPRs].some(
+            item => new Date(item.updatedAt) > sevenDaysAgo
+          );
+  
+          if (hasRecentActivity) {
+            return {
+              name: repo.name,
+              owner: repo.owner.login,
+              url: repo.html_url,
+              stars: repo.stargazers_count,
+              forks: repo.forks_count,
+              updatedAt: repo.updated_at,
+              recentIssues,
+              recentPRs,
+              
+            };
+          }
+          return null;
+        })
+      );
+  
+      return activeRepos.filter(Boolean).slice(0, 10); // Return up to 10 active repos
+    } catch (error) {
+      console.error('Error fetching global repos:', error.message);
+      throw error;
+    }
+  };
+
+  const fetchGoLangRepo = async () => {
+    try {
+      const { data } = await axios.get(
+        'https://api.github.com/search/repositories',
+        {
+          params: {
+            q: 'language:go stars:>1000',
+           
+            sort: 'updated',
+            order: 'desc',
+            per_page: 10 // Fetch more to filter
+          },
+          ...githubApiConfig
+        }
+      );
+  
+      const activeRepos = await Promise.all(
+        data.items.map(async (repo) => {
+          const [{ recentIssues, recentPRs }] = await Promise.all([
+              fetchRecentActivity(repo.owner.login, repo.name),
+              fetchLanguages(repo.owner.login,repo.name)  
+          ]) 
+          // Check if there's been activity in the last 7 days
+          const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+          const hasRecentActivity = [...recentIssues, ...recentPRs].some(
+            item => new Date(item.updatedAt) > sevenDaysAgo
+          );
+  
+          if (hasRecentActivity) {
+            return {
+              name: repo.name,
+              owner: repo.owner.login,
+              url: repo.html_url,
+              stars: repo.stargazers_count,
+              forks: repo.forks_count,
+              updatedAt: repo.updated_at,
+              recentIssues,
+              recentPRs,
+              
+            };
+          }
+          return null;
+        })
+      );
+  
+      return activeRepos.filter(Boolean).slice(0, 10); // Return up to 10 active repos
+    } catch (error) {
+      console.error('Error fetching global repos:', error.message);
+      throw error;
+    }
+  };
+
 
 app.get('/api/active-repos', async (req, res) => {
   try {
@@ -115,6 +379,55 @@ app.get('/api/active-repos', async (req, res) => {
   }
 });
 
+app.get('/api/ts-repo',async(req,res)=>{
+    try {
+        const repos =await fetchTsRepo()
+        res.json(repos)
+    } catch (error) {
+        console.log('server error:',err)
+        res.status(500).json({error:'failed to fetch data',message:err.message})
+    }
+})
+
+app.get('/api/js-repo',async(req,res)=>{
+    try {
+        const repos =await fetchJsRepo()
+        res.json(repos)
+    } catch (error) {
+        console.log('server error:',err)
+        res.status(500).json({error:'failed to fetch data',message:err.message})
+    }
+})
+
+app.get('/api/python-repo',async(req,res)=>{
+    try {
+        const repos =await fetchPythonRepo()
+        res.json(repos)
+    } catch (error) {
+        console.log('server error:',err)
+        res.status(500).json({error:'failed to fetch data',message:err.message})
+    }
+})
+
+app.get('/api/c-repo',async(req,res)=>{
+    try {
+        const repos =await fetchCRepo()
+        res.json(repos)
+    } catch (error) {
+        console.log('server error:',err)
+        res.status(500).json({error:'failed to fetch data',message:err.message})
+    }
+})
+
+app.get('/api/go-repo',async(req,res)=>{
+    try {
+        const repos =await fetchGoLangRepo()
+        res.json(repos)
+    } catch (error) {
+        console.log('server error:',err)
+        res.status(500).json({error:'failed to fetch data',message:err.message})
+    }
+})
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -127,7 +440,7 @@ app.listen(port, () => console.log(`Server running on http://localhost:${port}`)
 (async () => {
   try {
     const response = await axios.get('http://localhost:3001/api/active-repos');
-    console.log('Fetched active repos:', response.data);
+    // console.log('Fetched active repos:', response.data);
   } catch (error) {
     console.error('Error testing server:', error.message);
   }
