@@ -213,7 +213,19 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Something went wrong!', message: err.message });
 });
+const keepAlive = () => {
+  const url = 'https://openlang-backend.onrender.com';
+  setInterval(async () => {
+    try {
+      const response = await fetch(url);
+      console.log('Keep-alive ping sent, status:', response.status);
+    } catch (error) {
+      console.error('Keep-alive ping failed:', error);
+    }
+  }, 840000); // 14 minutes
+};
 
+keepAlive();
 app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
 
 // Test the server
