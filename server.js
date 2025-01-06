@@ -6,7 +6,7 @@ require('dotenv').config();
 const Redis = require('ioredis'); // Use the 'ioredis' library here
 const app = express();
 const port = process.env.PORT || 3001;
-const CACHE_EXPIRY_SECONDS = 7200; // Cache expiry time (1 hour)
+const CACHE_EXPIRY_SECONDS = 18000; // Cache expiry time (1 hour)
 
 
 // Middleware
