@@ -79,7 +79,7 @@ const fetchGlobalRepos = async () => {
          
           sort: 'updated',
           order: 'desc',
-          per_page: 30 // Fetch more to filter
+          per_page: 50 // Fetch more to filter
         },
         ...githubApiConfig
       }
@@ -114,7 +114,7 @@ const fetchGlobalRepos = async () => {
       })
     );
 
-    return activeRepos.filter(Boolean).slice(0, 30); // Return up to 10 active repos
+    return activeRepos.filter(Boolean).slice(0, 50); // Return up to 10 active repos
   } catch (error) {
     console.error('Error fetching global repos:', error.message);
     throw error;
@@ -127,7 +127,7 @@ const fetchReposByLanguage = async (language) => {
         q: `language:${language} stars:>1000`,
         sort: 'updated',
         order: 'desc',
-        per_page: 15
+        per_page: 30
       },
       ...githubApiConfig
     });
@@ -161,7 +161,7 @@ const fetchReposByLanguage = async (language) => {
       })
     );
 
-    return activeRepos.filter(Boolean).slice(0, 15); // Return up to 10 active repos
+    return activeRepos.filter(Boolean).slice(0, 30); // Return up to 10 active repos
   } catch (error) {
     console.error(`Error fetching ${language} repos:`, error.message);
     throw error;
