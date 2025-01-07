@@ -6,7 +6,7 @@ require('dotenv').config();
 const Redis = require('ioredis'); // Use the 'ioredis' library here
 const app = express();
 const port = process.env.PORT || 3001;
-const CACHE_EXPIRY_SECONDS = 18000; // Cache expiry time (1 hour)
+const CACHE_EXPIRY_SECONDS = 3600; // Cache expiry time (1 hour)
 
 
 // Middleware
@@ -68,6 +68,29 @@ const fetchLanguages = async (owner, repo) => {
     const languages =Object.keys(response.data)
     return languages[0]
 
+}
+
+const fetchGoodFirstIssues = async ()=>{
+  try {
+    const sevenDaysAgo = new Date(Date.now() - 30* 24 * 60 * 60 * 1000);
+       const formatedData = sevenDaysAgo.toISOString().split('T')[0]
+    const { data } = await axios.get(
+
+      'https://api.github.com/search/issues',{
+        params:{
+          q:`label:"good first issue" created:>${formatedData} state:open  `,
+          sort:'updated',
+          order:'desc',
+          per_page:40
+        },...githubApiConfig
+      }
+    )
+    return data;
+  } catch (error) {
+    console.error('Error fetching global repos:', error.message);
+    throw error;
+   
+  }
 }
 const fetchGlobalRepos = async () => {
   try {
@@ -167,6 +190,27 @@ const fetchReposByLanguage = async (language) => {
     throw error;
   }
 };
+app.get('/api/active-issues',async(req,res)=>{
+try {
+  const catchKey = req.originalUrl;
+  const cachedRepos = await redisClient.get(catchKey)
+ 
+  if(cachedRepos){
+    console.log('from redis')
+    return res.json(JSON.parse(cachedRepos))
+  
+  }
+  const issues = await fetchGoodFirstIssues()
+  await redisClient.set(catchKey,JSON.stringify(issues),'EX',CACHE_EXPIRY_SECONDS)
+  res.json(issues)
+
+} catch (error) {
+  console.error('Server error:', error);
+  res.status(500).json({ error: 'Failed to fetch data', message: error.message });
+
+}  
+
+})
 app.get('/api/repo/:language',async(req,res)=>{
   const {language} = req.params;
   try {
