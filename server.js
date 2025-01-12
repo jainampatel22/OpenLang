@@ -258,7 +258,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Something went wrong!', message: err.message });
 });
 const keepAlive = () => {
-  const url = 'https://openlang-backend.onrender.com';
+  const url = 'https://openlang-backend-pcy1.onrender.com';
   setInterval(async () => {
     try {
       const response = await fetch(url);
