@@ -266,7 +266,7 @@ const keepAlive = () => {
     } catch (error) {
       console.error('Keep-alive ping failed:', error);
     }
-  }, 840000); // 14 minutes
+  }, 36000000); // 12 hours
 };
 
 keepAlive();
