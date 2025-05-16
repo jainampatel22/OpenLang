@@ -20,9 +20,9 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 const redisClient = new Redis({
-  host: 'grown-kite-35323.upstash.io', // Upstash Redis instance URL
+  host: 'cute-seagull-26413.upstash.io', // Upstash Redis instance URL
   port: 6379, // Port for Redis connection
-  password: 'AYn7AAIjcDE0ZjMwNDAyYTJkMjA0MzFhODE2NzIyY2YxMzE0MDNiZHAxMA', // Upstash Redis password
+  password: 'AWctAAIjcDFhOTdhMGYyMGU4N2Y0ZjdmOGE2ODAzYzg0NzI2YzA1Y3AxMA', // Upstash Redis password
   tls: {} // Secure connection settings
 });
 // GitHub API configuration
