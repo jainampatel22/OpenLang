@@ -16,14 +16,14 @@ app.use(express.json());
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
+  max: 100 
 });
 app.use(limiter);
 const redisClient = new Redis({
-  host: 'more-boxer-32895.upstash.io', // ❌ Remove "https://"
+  host: 'possible-ox-52940.upstash.io',
   port: 6379,
-  password: 'AYB_AAIjcDE2NTMyZjlhYjVjY2U0YmRjOTlmMWQzOGVhYjY1YjM0ZHAxMA',
-  tls: {} // Upstash requires TLS
+  password: 'Ac7MAAIjcDFjZmI5NzBiMTI5ZWM0YmZiOTk2NTk5ODgzYzdiZTM4ZHAxMA',
+  tls: {} 
 });
 // GitHub API configuration
 const githubApiConfig = {
